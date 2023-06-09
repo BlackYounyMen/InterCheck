@@ -1,4 +1,4 @@
-﻿namespace SignInter.Util
+﻿namespace SignParse
 {
     public class YWXJsonParse
     {

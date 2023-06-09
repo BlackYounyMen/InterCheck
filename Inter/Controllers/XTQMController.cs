@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-
-using SignInter.Util;
+using SignParse;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -92,44 +91,6 @@ namespace Inter.Controllers
 
             var d = HttpClientHelper.Execute(HttpType.HttpPost, api_url, null, data, "返回前端调用方");
             return JsonConvert.SerializeObject(d);
-        }
-
-        /// <summary>
-        /// 获取数据文件
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public string GetJson(string id)
-        {
-            // 定义要调用的API接口的URL
-            string api_url = AppSettingsHelper.Configuration["XTQM:ResponseDataUrl"];
-
-            //get 请求参数方法
-            api_url = api_url + "?operation=getsigndata&id=" + id;
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                // 创建HTTP请求
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, api_url);
-
-                // 发送HTTP请求，并等待响应
-                HttpResponseMessage response = httpClient.SendAsync(request).Result;
-
-                // 检查响应状态码
-                if (response.IsSuccessStatusCode)
-                {
-                    // 读取响应内容
-                    string responseContent = response.Content.ReadAsStringAsync().Result;
-                    LogHelper.Loging("Request", responseContent, "前端返回签名的数据");
-                    return responseContent;
-                }
-                else
-                {
-                    // 处理请求失败的情况
-                }
-                return null;
-            }
         }
 
         /// <summary>

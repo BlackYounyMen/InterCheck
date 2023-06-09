@@ -1,5 +1,165 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 *@
 @{
+    Layout = null;
 }
+
+<head>
+
+</head>
+<style>
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Adjust the height to fit your needs */
+    }
+
+    #qrcode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #ShowMessage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        font-size: 1.3em;
+        text-align: center;
+    }
+</style>
+<body>
+
+
+    <div id="qrcode" class="QRCode" onclick="window.location.reload();"></div>
+    <div id="ShowMessage" hidden="hidden"></div>
+    <br />
+
+
+
+</body>
+
+<script src="~/js/qrcode.min.js"></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+<script src="~/layui-v2.5.6/layui/layui.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/cainterface.js"></script>
+<script src="~/js/jquery-1.4.4.min.js"></script>
+<script src="~/js/jquery-barcode.js"></script>
+
+<script>
+    var configparams = location.href.substring(location.href.indexOf('?') + 1, location.href.length);
+    var ids = configparams.split("&");
+    var Params = {};
+    var map = new Map();
+    var BackStringData = {};
+    for (var i = 0; i < ids.length; i++) {
+        var keyValue = ids[i].split('=');
+        if (keyValue.length == 2) {
+            var key = decodeURIComponent(keyValue[0]);
+            var value = decodeURIComponent(keyValue[1]);
+            map.set(key, value);
+        }
+    }
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/XTQM/GetUserJson",
+            dataType: "json",
+            async: false,
+            data: { id: map.get("id") },
+            success: function (d) {
+                console.log(d);
+                Params = d.data;
+                BackStringData["id"] = map.get("id");
+                add_pad_ca_user(d.data);
+            },
+        });
+    })
+
+
+
+    function add_pad_ca_user(databody) {
+        console.log(databody);
+        $.ajax({
+            type: "POST",
+            url: "/XTQM/add_pad_ca_user",
+            dataType: "json",
+            async: false,
+            data: { databody: JSON.stringify(databody) },
+            success: function (data) {
+                console.log(data);
+                BackStringData["appid"] = data.data.userId;
+                if (data.status == 200) {
+                    $("#ShowMessage").hide();
+                    getAuthCode(data.data.userId);
+                    Params["userId"] = data.userId;
+                }
+                else if (data.status == 89004002) {
+                    $("#ShowMessage").hide();
+                    getAuthCode(data.data.userId);
+                }
+                else {
+                    $("#ShowMessage").show();
+                    $("#ShowMessage").text("该用户未授权");
+                }
+
+            },
+        });
+    }
+
+    function getAuthCode(userid) {
+        console.log(userid);
+        $.ajax({
+            type: "POST",
+            url: "/XTQM/getAuthCode",
+            dataType: "json",
+            async: false,
+            data: { userId: userid },
+            success: function (d) {
+
+                console.log("返回数据", d);
+                console.log(d.data.authCode);
+
+                var qrcode = new QRCode(document.getElementById("qrcode"), {
+                    text: d.data.authCode,
+                    width: 250,
+                    height: 250,
+                    correctLevel: 3
+                });
+                $("#qrcode").removeAttr("title");
+                //$("#qrcode").barcode(d.data.authCode, "datamatrix", { barWidth: 350, barHeight: 350, showHRI: false });
+
+                $("#ShowMessage").show();
+                $("#ShowMessage").html("激活码：<span style='color:red;'>" + d.data.code + "</span>");
+                //$("#qrcode").removeAttr("title");
+                DataBack();
+            },
+        });
+    }
+
+    //#region  返回前端后的结果
+    function DataBack() {
+        console.log(BackStringData);
+        $.ajax({
+            type: "POST",
+            url: "/XTQM/CretBackData",
+            dataType: "json",
+            async: false,
+            data: { datainfo: JSON.stringify(BackStringData) }
+        });
+    }
+
+
+
+</script>
+
+
+

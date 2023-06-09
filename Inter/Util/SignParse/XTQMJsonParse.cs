@@ -1,4 +1,4 @@
-﻿namespace Inter.Util
+﻿namespace SignParse
 {
     public class XTQMJsonParse
     {
