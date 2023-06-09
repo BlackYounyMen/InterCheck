@@ -1,0 +1,130 @@
+﻿@{
+    Layout = null;
+}
+<head>
+    <style>
+        .centered-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 90vh;
+        }
+
+        #Display, #signsuccess {
+            display: none;
+        }
+
+            #Display.visible, #signsuccess.visible {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+    </style>
+</head>
+<div class="centered-container">
+    <div id="Display">
+        <h1 id="Name" style="text-align:center">授权</h1>
+        <div id="image"></div>
+        <br />
+        <div style="text-align:center">
+            二维码有效期:
+            <span id="countdown">180</span>
+        </div>
+    </div>
+    <div id="signsuccess">
+        <span id="info"></span>
+    </div>
+
+</div>
+
+
+<script src="~/js/qrcode.min.js"></script>
+<script src="~/layui-v2.5.6/layui/layui.all.js"></script>
+<script src="~/layui-v2.5.6/layui/layui.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    //id: 1003     openid=589e9f6684a482baq1704w7eb7y7a018239
+    var configparams = location.href.substring(location.href.indexOf('?') + 1, location.href.length);
+    var ids = configparams.split("&");
+
+    var map = new Map();
+    for (var i = 0; i < ids.length; i++) {
+        var keyValue = ids[i].split('=');
+        if (keyValue.length == 2) {
+            var key = decodeURIComponent(keyValue[0]);
+            var value = decodeURIComponent(keyValue[1]);
+            map.set(key, value);
+        }
+    }
+    
+    //#region 全局变量
+    // 签名id
+    var id = map.get("id");
+    //签名类型
+    var SignatureType = map.get("SignatureType");
+    //标题   (协同签名会使用)
+    var title = map.get("title");
+    //#endregion
+
+
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetJson",
+            dataType: "json",
+            async: false,
+            data: { id: id ,SignatureType: SignatureType },
+            success: function (d) {
+                
+                switch (SignatureType) {
+                    case "1":
+                        console.log(111);
+                        break;
+                    case "2":
+                        console.log(111);
+
+                        break;
+                    default:
+                        console.log(111);
+                        break;
+                }
+               
+                
+                console.log("标题值为", title);
+                console.log(d);
+                var data = d.data;
+                openid = openid;
+                type = data.type;
+                ca_user_id = data.ca_user_id;    
+                data["title"] = title;
+                Params = JSON.stringify(data);
+                BackDataString["type"] = data.type;
+                BackDataString["id"] = id;
+                BackDataString["table_name"] = data.table_name;
+                BackDataString["hosp_clinic_id"] = data.hosp_clinic_id;
+                BackDataString["table_rows_id"] = data.table_rows_id;
+                BackDataString["pad_signToken"] = data.pad_signToken;
+                console.log("获取的值为", Params);
+                BackDataString["appid"] = openid;
+                if (openid == null || openid == undefined || openid == "") {
+                    $("#Display").show();
+                    $("#Name").html("登录");
+                    openid_Auth_Request();
+                    openid_GetUser();
+
+                } else {
+
+                    Auto_Sign_Auth();
+                }
+            },
+        });
+    })
+
+
+
+
+</script>

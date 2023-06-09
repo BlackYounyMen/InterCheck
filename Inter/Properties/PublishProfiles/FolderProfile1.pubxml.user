@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\项目\Inter\Inter\bin\Release\net6.0\publish\</_PublishTargetUrl>
+    <History>True|2023-05-23T01:15:24.1768701Z;True|2023-05-19T14:28:12.9189804+08:00;True|2023-05-18T16:42:45.8031901+08:00;True|2023-05-18T15:12:05.4096557+08:00;True|2023-05-18T14:28:00.3831832+08:00;True|2023-05-17T11:21:34.1506879+08:00;True|2023-05-15T11:28:32.7231162+08:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
