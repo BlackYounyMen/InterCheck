@@ -46,6 +46,7 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/js/xtqmsign.js"></script>
+<script src="~/js/ywxsign.js"></script>
 <script>
 
     //id: 1003     openid=589e9f6684a482baq1704w7eb7y7a018239
@@ -78,7 +79,10 @@
     //返回数据,
     var backDataString = {}; 
 
-    var time1,time2,Backtimer,timer;
+    var time1,time2,backtimer,timer;
+
+    //请求id,一般签名没有登录的情况下使用
+    var requestId;
     //#endregion
 
 
@@ -92,11 +96,32 @@
             success: function (d) {
                 console.log(111111);
                 console.log(d);
-                XTQMStart(d);              
-     
+                if (signatureType == 1) YWXStart(d);
+                else if (signatureType == 2) XTQMStart(d);
+
+                
             },
         });
     })
+
+    
+    function DataBack() {
+        console.log(backDataString);
+        $.ajax({
+            type: "POST",
+            url: "/Home/BackData",
+            dataType: "json",
+            async: false,
+            data: { datainfo: JSON.stringify(backDataString), SignatureType: signatureType },
+            success: function (data) {
+                console.log(data);
+                $("#signsuccess").show();
+                $('#info').text("签名已成功");
+
+                return;
+            },
+        });
+    }
 
 
 

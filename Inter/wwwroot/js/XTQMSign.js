@@ -1,10 +1,6 @@
 ﻿function XTQMStart(d) {
-    console.log(d);
     console.log("标题值为", title);
-    console.log(d);
     var data = d.data;
-    console.log(data);
-    openId = openId;
     type = data.type;
     //ca_user_id = data.ca_user_id;
     ca_user_id = "140105198506020012"; //测试的时候注释上方
@@ -63,7 +59,7 @@ function XTQM_Auth_Request() {
                 countdownEl.textContent = icount; // 更新数据元素内容
                 if (icount <= 0) { // 如果数据为零
                     clearInterval(time2); // 停止定时器
-                    clearInterval(Backtimer); // 停止定时器
+                    clearInterval(backtimer); // 停止定时器
                 }
             }, 1000);
         },
@@ -95,7 +91,7 @@ function XTQM_GetUser() {
                 });
             }
             else {
-                Backtimer = setTimeout(() => { XTQM_GetUser() }, 2000);
+                backtimer = setTimeout(() => { XTQM_GetUser() }, 2000);
             }
         },
     });
@@ -124,7 +120,7 @@ function XTQMSign() {
                 console.log("传递数据的值是", params);
                 //DocRequestSelect();
                 clearTimeout(timer);//清理定时任务
-                clearTimeout(Backtimer);//清理定时任务
+                clearTimeout(backtimer);//清理定时任务
                 clearTimeout(time2);//清理定时任务
                 clearTimeout(time1);//清理定时任务
 
@@ -273,21 +269,3 @@ function GetAuto_Sign(params) {
 }
 
 //#endregion
-
-//#region  返回前端后的结果
-function DataBack() {
-    console.log(backDataString);
-    $.ajax({
-        type: "POST",
-        url: "/XTQM/BackData",
-        dataType: "json",
-        async: false,
-        data: { datainfo: JSON.stringify(backDataString) },
-        success: function (data) {
-            console.log(data);
-            $("#signsuccess").show();
-            $('#info').text("签名已成功");
-            return;
-        },
-    });
-}

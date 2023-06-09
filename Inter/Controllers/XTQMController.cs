@@ -33,10 +33,8 @@ namespace Inter.Controllers
                     interJsonParse = JsonConvert.DeserializeObject<XTQMJsonParse>(data);
                 }
             }
-            DataConfig.httpdata = AppSettingsHelper.Configuration["XTQM:http"];
-            DataConfig.domainName = AppSettingsHelper.Configuration["XTQM:DomainName"];
-            DataConfig.clientId = AppSettingsHelper.Configuration["XTQM:ClientId"];
-            DataConfig.clientSecret = AppSettingsHelper.Configuration["XTQM:ClientSecret"];
+            DataConfig.httpdata = ConfigHelper.GetSection("XTQM", "Http");
+            DataConfig.domainName = ConfigHelper.GetSection("XTQM", "DomainName");
         }
 
         #endregion 注入公共配置
@@ -54,84 +52,6 @@ namespace Inter.Controllers
         { return View(); }
 
         #endregion 视图
-
-        #region 调用发方法
-
-        /// <summary>
-        /// 返回到前个服务器
-        /// </summary>
-        /// <param name="datainfo"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public string BackData(string datainfo)
-        {
-            string api_url = AppSettingsHelper.Configuration["XTQM:RequestDataUrl"];
-
-            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(datainfo);
-            //get 请求参数方法
-            api_url = api_url + "?operation=savesigndata";
-
-            var d = HttpClientHelper.Execute(HttpType.HttpPost, api_url, null, data, "返回前端调用方");
-            return JsonConvert.SerializeObject(d);
-        }
-
-        /// <summary>
-        /// 返回到前个服务器(代签数据已经签完名后的结果)
-        /// </summary>
-        /// <param name="datainfo"></param>
-        /// <returns></returns>
-
-        public string CretBackData(string datainfo)
-        {
-            string api_url = AppSettingsHelper.Configuration["XTQM:RequestDataUrl"];
-
-            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(datainfo);
-            //get 请求参数方法
-            api_url = api_url + "?operation=savecretresult";
-
-            var d = HttpClientHelper.Execute(HttpType.HttpPost, api_url, null, data, "返回前端调用方");
-            return JsonConvert.SerializeObject(d);
-        }
-
-        /// <summary>
-        /// 获取用户数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public string GetUserJson(string id)
-        {
-            // 定义要调用的API接口的URL
-            string api_url = AppSettingsHelper.Configuration["XTQM:ResponseDataUrl"];
-
-            //get 请求参数方法
-            api_url = api_url + "?operation=getuserdata&id=" + id;
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                // 创建HTTP请求
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, api_url);
-
-                // 发送HTTP请求，并等待响应
-                HttpResponseMessage response = httpClient.SendAsync(request).Result;
-
-                // 检查响应状态码
-                if (response.IsSuccessStatusCode)
-                {
-                    // 读取响应内容
-                    string responseContent = response.Content.ReadAsStringAsync().Result;
-                    LogHelper.Loging("Request", responseContent, "前端返回签名的数据");
-                    return responseContent;
-                }
-                else
-                {
-                    // 处理请求失败的情况
-                }
-                return null;
-            }
-        }
-
-        #endregion 调用发方法
 
         /// <summary>
         /// 添加用户

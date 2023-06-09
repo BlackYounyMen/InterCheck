@@ -29,23 +29,11 @@ namespace Inter.Controllers
                     interJsonParse = JsonConvert.DeserializeObject<YWXJsonParse>(data);
                 }
             }
-        }
 
-        /// <summary>
-        /// 返回到前个服务器
-        /// </summary>
-        /// <param name="datainfo"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public string BackData(string datainfo)
-        {
-            string api_url = ConfigHelper.GetSection("RequestDataUrl");
-
-            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(datainfo);
-            //get 请求参数方法
-            api_url = api_url + "?operation=savesigndata";
-
-            return HttpClientHelper.Execute(HttpType.HttpPost, api_url, null, data, "返回前端调用方");
+            DataConfig.httpdata = ConfigHelper.GetSection("YWX", "Http");
+            DataConfig.domainName = ConfigHelper.GetSection("YWX", "DomainName");
+            DataConfig.clientId = ConfigHelper.GetSection("YWX", "ClientId");
+            DataConfig.clientSecret = ConfigHelper.GetSection("YWX", "ClientSecret");
         }
 
         /// <summary>
