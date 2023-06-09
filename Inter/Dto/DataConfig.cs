@@ -1,4 +1,4 @@
-﻿using InterFace;
+﻿using Inter.Util;
 
 namespace Inter
 {

@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace RestSharpDemo.Web
+namespace Inter.Util
 {
     /// <summary>
     /// Http请求类型:Post/Put/Get/Delete

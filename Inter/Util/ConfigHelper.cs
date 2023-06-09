@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace InterFace
+namespace Inter.Util
 {
     /// <summary>
     /// appsettings里面的帮助类

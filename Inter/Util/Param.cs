@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using InterFace;
 
-namespace Inter.Util.Params.XTQM
+namespace Inter.Util
 {
     public class Param
     {
         public static SortedDictionary<string, string> GetConfigValue()
         {
             SortedDictionary<string, string> ParamsDic = new SortedDictionary<string, string>();
-            ParamsDic.Add("appId", ConfigHelper.GetSection("appId"));
-            ParamsDic.Add("signAlgo", ConfigHelper.GetSection("signAlgo"));
-            ParamsDic.Add("version", ConfigHelper.GetSection("version"));
+            ParamsDic.Add("appId", ConfigHelper.GetSection("XTQM", "appId"));
+            ParamsDic.Add("signAlgo", ConfigHelper.GetSection("XTQM", "signAlgo"));
+            ParamsDic.Add("version", ConfigHelper.GetSection("XTQM", "version"));
             //ParamsDic.Add("secretKey", ConfigHelper.GetSection("secretKey"));
             return ParamsDic;
         }
@@ -60,7 +59,7 @@ namespace Inter.Util.Params.XTQM
         /// <returns></returns>
         public static string GetsignatureValue(SortedDictionary<string, string> paramdata)
         {
-            string secretKey = ConfigHelper.GetSection("secretKey");
+            string secretKey = ConfigHelper.GetSection("XTQM", "secretKey");
             string sortStr = SortJson(paramdata, secretKey);
             string SignTemp = HmacSHA256(sortStr, secretKey);
             return SignTemp;

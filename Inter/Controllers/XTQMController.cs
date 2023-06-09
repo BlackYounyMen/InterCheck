@@ -1,17 +1,15 @@
 ﻿using Inter.Util;
 using Inter.Params.XTQM;
-using InterFace;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using RestSharpDemo.Web;
+
 using SignInter.Util;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Params.XTQM;
-using Inter.Util.Params.XTQM;
 
 namespace Inter.Controllers
 {
@@ -570,7 +568,7 @@ namespace Inter.Controllers
             #region 在此放参数
 
             paramdata.Add("userId", data.appid);
-            paramdata.Add("title", string.IsNullOrWhiteSpace(data.title) ? ConfigHelper.GetSection("DefaultTitle") : data.title);
+            paramdata.Add("title", string.IsNullOrWhiteSpace(data.title) ? ConfigHelper.GetSection("XTQM", "DefaultTitle") : data.title);
             paramdata.Add("dataType", "DATA");
             paramdata.Add("algo", "SM3withSM2");
             paramdata.Add("expiryDate", (24 * 3 * 60).ToString());

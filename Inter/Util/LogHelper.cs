@@ -1,5 +1,4 @@
-﻿using InterFace;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 
 namespace Inter.Util
