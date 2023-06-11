@@ -10,3 +10,15 @@ C:\Users\项目\全部接口\CA_Interface\Params\obj\Debug\net5.0\Params.dll
 C:\Users\项目\全部接口\CA_Interface\Params\obj\Debug\net5.0\refint\Params.dll
 C:\Users\项目\全部接口\CA_Interface\Params\obj\Debug\net5.0\Params.pdb
 C:\Users\项目\全部接口\CA_Interface\Params\obj\Debug\net5.0\ref\Params.dll
+D:\工作\InterCheck\Params\bin\Debug\net5.0\Params.deps.json
+D:\工作\InterCheck\Params\bin\Debug\net5.0\Params.dll
+D:\工作\InterCheck\Params\bin\Debug\net5.0\Params.pdb
+D:\工作\InterCheck\Params\obj\Debug\net5.0\Params.csproj.AssemblyReference.cache
+D:\工作\InterCheck\Params\obj\Debug\net5.0\Params.GeneratedMSBuildEditorConfig.editorconfig
+D:\工作\InterCheck\Params\obj\Debug\net5.0\Params.AssemblyInfoInputs.cache
+D:\工作\InterCheck\Params\obj\Debug\net5.0\Params.AssemblyInfo.cs
+D:\工作\InterCheck\Params\obj\Debug\net5.0\Params.csproj.CoreCompileInputs.cache
+D:\工作\InterCheck\Params\obj\Debug\net5.0\Params.dll
+D:\工作\InterCheck\Params\obj\Debug\net5.0\refint\Params.dll
+D:\工作\InterCheck\Params\obj\Debug\net5.0\Params.pdb
+D:\工作\InterCheck\Params\obj\Debug\net5.0\ref\Params.dll

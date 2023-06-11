@@ -26,10 +26,11 @@ function YWXStart(d) {
 }
 
 ///手动签名
-function Continue() {
-    clearInterval(SigntimerSign); // 停止定时器
-    clearInterval(SignStatetimer); // 停止定时器
+function Continue() {    
+    clearInterval(timer); // 停止定时器
+    console.log(111111111111111111111);
     $("#Display").hide();
+    console.log(type);
     if (type == "EMR") {//纯数据类型
         console.log("这里是手动签名返回的数据")
         YWX_EMR_Sign();
@@ -44,6 +45,7 @@ function Continue() {
 
 //#region 4.3.1自动签名授权-请求自动签名授权接口
 function Auto_Sign() {
+    $("#countdown").text(180);
     $.ajax({
         type: "POST",
         url: "/YWX/Acq_Auth_Res",
@@ -79,13 +81,13 @@ function Auto_Sign() {
                         $("#Display").show();
                         $("#sign").show();
                         $("#image").attr("src", "data:image/png;base64," + data.data);
-                        Auto_Sign();
+                        Acq_Auth_Res();
                         time1 = setInterval(function () {
                             var countdownEl = document.getElementById("countdown"); // 获取数据元素
                             var count = parseInt(countdownEl.textContent); // 获取数据并转换为整数
                             count--; // 每秒减少一个
                             countdownEl.textContent = count; // 更新数据元素内容
-                            if (count <= "0") { // 如果数据为零
+                            if (count <= 0) { // 如果数据为零
                                 clearInterval(time1); // 停止定时器
                             }
                         }, 1000);
@@ -166,10 +168,13 @@ function YWX_GetInfo() {
                             backDataString["openid"] = data.data.openid;
                             console.log(Params);
                             //DocRequestSelect();
-                            clearTimeout(timer);//清理定时任务
+                           
                             clearTimeout(backtimer);//清理定时任务
                             clearTimeout(time2);//清理定时任务
-                            clearTimeout(time1);//清理定时任务
+
+
+                            //clearTimeout(time1);//清理定时任务
+                            //clearTimeout(timer);//清理定时任务
 
                             $("#Name").html("授权");
                             $("#sign").show();
@@ -300,6 +305,73 @@ function Auto_Get_Signature() {
             else {
                 // 在没有获取到 signedData 时，继续轮询
                 pollingTimeout = setTimeout(Auto_Get_Signature(), 1000);
+            }
+        },
+    });
+}
+
+
+
+//#region 5.1.2获取签名结果
+function Get_Signature() {
+    $.ajax({
+        type: "POST",
+        url: "/QRCode/Get_Signature",
+        dataType: "json",
+        async: false,
+        data: { uniqueId: uniqueId },
+        success: function (data) {
+            console.log("这个是5.1.2获取签名结果")
+            console.log(data.Data);
+            backDataString["cert"] = data.data.cert;
+            backDataString["uniqueId"] = data.data.uniqueId;
+            backDataString["sign_value"] = data.data.p1;
+            backDataString["signTime"] = data.data.signTime;
+            backDataString["sign_state"] = "1"; //代签
+            console.log(backDataString);
+            console.log(backDataString);
+            DataBack();
+        },
+    });
+}
+//#endregion
+
+
+
+function Acq_Auth_Res() {
+    $.ajax({
+        type: "POST",
+        url: "/YWX/Acq_Auth_Res",
+        dataType: "json",
+        async: false,
+        data: { openid: openId },
+        success: function (data) {          
+            if (data.data.grantStep == "1") {
+                $("#Display").hide();
+                if (type == "Data") {
+                    console.log("这是自动签名返回的数据")
+                    YWX_Data_Sign();
+                    Auto_Get_Signature();
+                }
+                else if (type == "PDF") {
+                    console.log("这是自动签名返回的数据")
+                    YWX_PDF_Sign();
+                    Auto_Get_Signature();
+                }
+                else if (type == "EMR") {
+                    YWX_EMR_Sign();
+                    Auto_Get_Signature();
+                }
+            }
+            else if (data.data.grantStep == "2") {
+                $("#Display").show();
+                $("#sign").show();
+                Auto_Sign();
+                setTimeout(() => { Acq_Auth_Res() }, 2000);
+            }
+            else {
+                console.log(new Date, "第" + i++ + "次执行结果，" + data.data.grantStep);
+                timer = setTimeout(() => { Acq_Auth_Res() }, 2000);
             }
         },
     });
